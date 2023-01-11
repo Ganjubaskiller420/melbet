@@ -1,0 +1,65 @@
+<%- layout('layouts/layout.ejs')%>
+    <div class="w-75 mx-auto mt-3" style="min-height: 100%">
+        <div class="row hidden-md-up my-3">
+            <form action="/deposits" method="post" class="w-100 mx-auto mb-5 mt-3">
+                <h4 class="text-center">Deposits</h4>
+                <div class="row">
+                    <div class="col my-3">
+                        <label for="link" class="form-label">Spread-Sheet Id</label>
+                        <input type="text" class="form-control" id="link" name="link" required />
+                    </div>
+                    <div class="col my-3">
+                        <label for="table" class="form-label">Table name</label>
+                        <input type="text" class="form-control" id="table" name="table" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="from" class="form-label">From</label>
+                        <input type="date" class="form-control" id="from" name="from" required />
+                    </div>
+                    <div class="col mb-3">
+                        <label for="to" class="form-label">To</label>
+                        <input type="date" class="form-control" id="to" name="to" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="id_column" class="form-label">Id Column Name</label>
+                        <input type="text" class="form-control" id="id_column" name="id_column" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <h4 class="text-center my-3">Columns A-Z</h4>
+                    <div class="col mb-3">
+                        <label for="hasDep" class="form-label">Has deposit</label>
+                        <input type="text" class="form-control" id="hasDep" name="hasDep" required />
+                    </div>
+                    <div class="col mb-3">
+                        <label for="depSum" class="form-label">Deposit summary</label>
+                        <input type="text" class="form-control" id="depSum" name="depSum" />
+                    </div>
+                </div>
+                <div class="row">
+                    <h4 class="text-center my-3">Preferences</h4>
+                    <div class="col mb-3">
+                        <label for="start" class="form-label">Start from</label>
+                        <input type="number" value="1" class="form-control" id="start" name="start" />
+                    </div>
+                    <div class="col mb-3">
+                        <label for="part" class="form-label">Part</label>
+                        <input type="number" value="100" class="form-control" id="part" name="part" />
+                    </div>
+                </div>
+                <div class="row">
+                    <h4 class="text-center my-3">Preferences</h4>
+                    <div class="col mb-3">
+                        <label for="google2fa" class="form-label">2FA Code</label>
+                        <input type="number" class="form-control" id="google2fa" name="google2fa" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-dark w-100">Sumbit</button>
+            </form>
+
+        </div>
+    </div>
