@@ -27,10 +27,22 @@ const getDriver = () => {
 	return driver;
 };
 const main = async () => {
-	driver = await new Builder()
-		.forBrowser('firefox')
-		.setFirefoxOptions(new firefox.Options().headless().windowSize({ width: 1600, height: 900 }))
-		.build();
+	let options = new firefox.Options();
+	options.setBinary(process.env.CHROME_BINARY_PATH);
+	let serviceBuilder = new firefox.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
+
+	//Don't forget to add these for heroku
+	options.addArguments('--headless');
+	options.addArguments('--disable-gpu');
+	options.addArguments('--no-sandbox');
+	options.windowSize({ width: 1600, height: 900 });
+
+	driver = await new Builder().forBrowser('firefox').setFirefoxOptions(options).setFirefoxService(serviceBuilder).build();
+	//
+	// driver = await new Builder()
+	// 	.forBrowser('firefox')
+	// 	.setFirefoxOptions(new firefox.Options().headless().windowSize({ width: 1600, height: 900 }))
+	// 	.build();
 	//await driver.get(`https://www.google.com/search?&q=google`);
 	//await driver.findElement(By.xpath('/html/body/div[3]/div[3]/span/div/div/div/div[3]/div[1]/button[1]/div')).click();
 };
