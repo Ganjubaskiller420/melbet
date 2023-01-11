@@ -6,12 +6,12 @@ const router = Router();
 
 router
 	.route('/deposits')
-	.get((req, res) =>
+	.get(verifyToken, (req, res) =>
 		res.render('deposits', {
 			login: req.session.login,
 		})
 	)
-	.post(getDeposits, (req, res) => {
+	.post(verifyToken, getDeposits, (req, res) => {
 		res.render('success', {
 			data: `https://docs.google.com/spreadsheets/d/${req.body.link}`,
 			login: req.session.login,
