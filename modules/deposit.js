@@ -1,8 +1,6 @@
 import * as dotenv from 'dotenv';
 import fetch from 'node-fetch';
-import token from './getToken.js';
-const env = dotenv.config();
-let accessToken;
+import { getToken } from './getToken.js';
 
 const genRequestObject = async (clientId, partnerId, fromDate, toDate) => {
 	return {
@@ -47,7 +45,7 @@ const genRequestObject = async (clientId, partnerId, fromDate, toDate) => {
 	};
 };
 
-const genParams = async (requestObject, accessToken) => {
+const genParams = async (requestObject, token) => {
 	const details = {
 		Method: 'GetPlayerPaymentRequestsPaging',
 		Controller: 'PaymentSystem',
@@ -65,30 +63,27 @@ const genParams = async (requestObject, accessToken) => {
 	return {
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-			Authorization: accessToken,
+			Authorization: token,
 		},
 		body: payload,
 		method: 'POST',
 	};
 };
 
-const getDepositData = async (id, from_date, to_date, accessToken) => {
+export const getClientDepositData = async (id, from_date, to_date) => {
 	let reqObj = await genRequestObject(id, process.env.partnerId, from_date, to_date);
 	let data;
 	try {
 		do {
-			let response = await fetch(process.env.url_dep, await genParams(reqObj, accessToken)).catch((err) => {
+			let response = await fetch(process.env.url_dep, await genParams(reqObj, await getToken())).catch((err) => {
 				console.log(`ERR:${err}`);
 			});
 			data = JSON.parse(JSON.stringify(await response.json()));
 			if (data.ResponseCode === 29 || data.ResponseCode === 68) {
-				//console.log('ResponseCode: ' + data.ResponseCode);
-				accessToken = await token.getToken();
 			} else if (data.ResponseCode === 22) {
 				console.log('Client Not Found: ' + data.ResponseCode);
 				return null;
 			}
-			console.log(data);
 		} while (data.ResponseCode !== 0);
 	} catch (ex) {
 		console.log(ex);
@@ -97,4 +92,4 @@ const getDepositData = async (id, from_date, to_date, accessToken) => {
 	return data.ResponseObject;
 };
 
-export default { genRequestObject, genParams, getDepositData };
+export default { genRequestObject, genParams, getClientDepositData };

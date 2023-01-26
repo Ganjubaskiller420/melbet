@@ -1,6 +1,6 @@
 import { fetch } from 'cross-fetch';
-import token from './getToken.js';
-const generateParams = (token, clientId) => {
+import { getToken } from './getToken.js';
+const generateParams = (clientId, token) => {
 	return {
 		headers: {
 			'Content-Type': 'application/json; charset=UTF-8',
@@ -15,10 +15,9 @@ export const getClient = async (id) => {
 	let data;
 	try {
 		do {
-			let response = await fetch(process.env.url_id, generateParams(await token.getToken(), id)).catch((err) => {
+			let response = await fetch(process.env.url_id, generateParams(id, await getToken())).catch((err) => {
 				console.log(err);
 			});
-
 			data = JSON.parse(JSON.stringify(await response.json()));
 			if (data.ResponseCode === 29 || data.ResponseCode === 68) {
 				console.log('ResponseCode: ' + data.ResponseCode);
