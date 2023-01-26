@@ -1,8 +1,10 @@
 const link = 'https://admin.dgbuilder.ru/#/platform/welcome';
 
+import * as dotenv from 'dotenv';
 import readline from 'readline-sync';
 import { Builder, By, error, Key, logging, until } from 'selenium-webdriver';
 import firefox from 'selenium-webdriver/firefox.js';
+dotenv.config();
 
 let driver;
 let accessToken;
@@ -10,8 +12,8 @@ let accessToken;
 const login = async (google2fa = undefined) => {
 	await driver.get(link);
 	await driver.wait(until.elementLocated(By.className('mat-form-field-infix')));
-	await driver.findElement(By.id('mat-input-0')).sendKeys('Maksym.Hlushchuk');
-	await driver.findElement(By.id('mat-input-1')).sendKeys('Melbet1488');
+	await driver.findElement(By.id('mat-input-0')).sendKeys(process.env.login);
+	await driver.findElement(By.id('mat-input-1')).sendKeys(process.env.password);
 	await driver.findElement(By.className('mat-button-wrapper')).click();
 	await driver.wait(until.elementLocated(By.id('mat-input-2')));
 	if (!google2fa) google2fa = askGoogleCode('Input google 2FA code: ');

@@ -8,7 +8,8 @@ import { getClientDepositData } from './modules/deposit.js';
 import { getClientByEmail } from './modules/email.js';
 import { getToken, initialize } from './modules/getToken.js';
 import { getClientByPhone } from './modules/phone.js';
-dotenv.config({ path: '../.env' });
+dotenv.config();
+//import { clientinfo, deposit, idByEmail, idByPhone } from './modules/executes.js';
 
 function isNumeric(value) {
 	return /^\d+$/.test(value);
@@ -72,7 +73,7 @@ const mainLoop = async () => {
 	}
 };
 
-const deposit = async (idsColumn, depositColumn) => {
+export const deposit = async (idsColumn, depositColumn) => {
 	const ids = await sheetDao.getColumn(idsColumn);
 	for (let i = start; i < ids.length; i += part) {
 		console.log(' ' + i + ' - ' + (i + part) + ' | ' + ids.length);
@@ -94,7 +95,7 @@ const deposit = async (idsColumn, depositColumn) => {
 	}
 };
 
-const clientinfo = async (idsColumn, columns) => {
+export const clientinfo = async (idsColumn, columns) => {
 	const ids = await sheetDao.getColumn(idsColumn);
 	for (let i = start; i < ids.length; i += part) {
 		console.log(' ' + i + ' - ' + (i + part) + ' | ' + ids.length);
@@ -116,7 +117,7 @@ const clientinfo = async (idsColumn, columns) => {
 	}
 };
 
-const idByEmail = async (emailColumn, idColumn) => {
+export const idByEmail = async (emailColumn, idColumn) => {
 	const emails = await sheetDao.getColumn(emailColumn);
 	for (let i = start; i < emails.length; i += part) {
 		console.log(' ' + i + ' - ' + (i + part) + ' | ' + emails.length);
@@ -138,7 +139,7 @@ const idByEmail = async (emailColumn, idColumn) => {
 	}
 };
 
-const idByPhone = async (phoneColumn, idColumn) => {
+export const idByPhone = async (phoneColumn, idColumn) => {
 	const phones = await sheetDao.getColumn(phoneColumn);
 	for (let i = start; i < phones.length; i += part) {
 		console.log(' ' + i + ' - ' + (i + part) + ' | ' + phones.length);
@@ -159,5 +160,4 @@ const idByPhone = async (phoneColumn, idColumn) => {
 		await sheetDao.setId(clients, i + 1, part, idColumn);
 	}
 };
-
-mainLoop();
+if (args.length) mainLoop();

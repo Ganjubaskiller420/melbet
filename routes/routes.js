@@ -1,13 +1,20 @@
 import { Router } from 'express';
 import authRoutes from './auth.routes.js';
-import deposits from './deposits.routes.js';
+import operations from './operations.routes.js';
 
 const router = Router();
-router.use(deposits);
+router.use(operations);
 router.use(authRoutes);
+
+const modules = [
+	{ name: 'Deposits', route: 'deposits' },
+	{ name: 'Clients Info', route: 'clientinfo' },
+];
+
 router.get('/', (req, res) => {
 	res.render('main', {
 		login: req.session.login,
+		modules: modules,
 	});
 });
 

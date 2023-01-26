@@ -4,7 +4,6 @@ import * as dotenv from 'dotenv';
 import sheetDao from '../modules/dao.js';
 import { getClientDepositData } from '../modules/deposit.js';
 import { getToken, initialize } from '../modules/getToken.js';
-// import { deposit } from '../scripts.js';
 
 dotenv.config({ path: '../.env' });
 
@@ -12,21 +11,27 @@ function isId(id) {
 	return /^\d{9}$/.test(id);
 }
 
-export const getDeposits = async (req, res, next) => {
+export const getClientInfo = async (req, res, next) => {
 	let body = req.body;
-	body.hasDep = body.hasDep.toUpperCase();
-	body.depSum = body.depSum.toUpperCase();
+
 	body.start = parseInt(body.start);
 	body.part = parseInt(body.part);
-	body.from += 'T00:00:00.000Z';
-	body.to += 'T00:00:00.000Z';
+
 	sheetDao.spreadsheetId = body.link;
 	sheetDao.sheetName = body.table;
+
 	await initialize(body.google2fa);
-	deposit(body.id_column, body.depSum, body);
+	const columns = {
+		fullname: body.fullname.toUpperCase(),
+		phone: body.phone.toUpperCase(),
+		city: body.city.toUpperCase(),
+		email: body.email.toUpperCase(),
+	};
+	clientinfo(body.id_column, columns, body);
 	next();
 };
-const deposit = async (idsColumn, depositColumn, body) => {
+
+const clientinfo = async (idsColumn, columns, body) => {
 	const ids = await sheetDao.getColumn(idsColumn);
 	for (let i = body.start; i < ids.length; i += body.part) {
 		console.log(' ' + i + ' - ' + (i + body.part) + ' | ' + ids.length);
@@ -36,7 +41,7 @@ const deposit = async (idsColumn, depositColumn, body) => {
 			let id = ids[index];
 			if (isId(id)) {
 				console.log(index + ': ' + id);
-				await getClientDepositData(id, body.from, body.to).then((client) => {
+				await getClient(id).then((client) => {
 					clients.push(client);
 				});
 			} else {
@@ -44,6 +49,6 @@ const deposit = async (idsColumn, depositColumn, body) => {
 				clients.push(null);
 			}
 		}
-		await sheetDao.setDepositAmount(clients, i + 1, body.part, depositColumn);
+		await sheetDao.setAllClientInfo(clients, i + 1, body.part, columns);
 	}
 };

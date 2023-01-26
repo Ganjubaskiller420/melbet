@@ -1,8 +1,16 @@
 <%- layout('layouts/layout.ejs')%>
   <div class="w-75 mx-auto mt-3" style="min-height: 100%">
     <div class="row hidden-md-up my-3">
-      <ul>
-        <li><a href="/deposits">Deposits</a></li>
-      </ul>
+      <%if(modules.length){%>
+        <% modules.forEach(elem=> { %>
+          <div class="col-sm-6">
+            <div class="card"><a style="text-decoration: none;" class="card-body text-center text-dark font-weight-bold"
+                href="/<%=elem.route%>">
+                <%=elem.name%>
+              </a>
+            </div>
+          </div>
+          <%})%>
+            <%}%>
     </div>
   </div>

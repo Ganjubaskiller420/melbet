@@ -1,11 +1,13 @@
 import * as dotenv from 'dotenv';
 import { google } from 'googleapis';
-dotenv.config({ path: '../.env' });
+dotenv.config();
+
 const auth = new google.auth.GoogleAuth({
-	keyFile: '../keys.json',
+	keyFile: 'keys.json',
 	scopes: 'https://www.googleapis.com/auth/spreadsheets',
 });
 const service = google.sheets({ version: 'v4', auth: auth });
+
 class SheetDAO {
 	spreadsheetId = process.env.spreadsheetId;
 	sheetName = process.env.sheetName;
