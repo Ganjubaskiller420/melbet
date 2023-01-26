@@ -16,8 +16,8 @@ const columns = {
 };
 
 class SheetDAO {
-	spreadsheetId = '';
-	sheetName = '';
+	spreadsheetId = process.env.spreadsheetId;
+	sheetName = process.env.sheetName;
 	writeCell = async (row, column, data) => {
 		await service.spreadsheets.values.update({
 			auth,
@@ -42,6 +42,68 @@ class SheetDAO {
 				values: data,
 			},
 		});
+	};
+	clientExists = async (clients, partNum, partSize) => {
+		let clientsCollection = [];
+		for (let i = 0; i < clients.length; i++) {
+			if (clients[i] !== null && clients[i].Entities.length !== 0) {
+				clientsCollection.push('+');
+			} else clientsCollection.push('-');
+		}
+		console.log('Info collected');
+		await this.writeColumn('K', clientsCollection, partNum, partNum + partSize);
+		console.log('Recorded...');
+	};
+	idByPhone = async (clients, partNum, partSize) => {
+		let clientsCollection = [];
+		for (let i = 0; i < clients.length; i++) {
+			console.log(clients[i]);
+			if (clients[i]?.Count > 0 && clients[i]?.Entities[0] !== null) {
+				clientsCollection.push(clients[i].Entities[0].Id);
+			} else clientsCollection.push('-');
+		}
+		console.log('Info collected');
+		await this.writeColumn('J', clientsCollection, partNum, partNum + partSize);
+		console.log('Recorded...');
+	};
+	registrationDate = async (clients, partNum, partSize, column) => {
+		let clientsCollection = [];
+		for (let i = 0; i < clients.length; i++) {
+			console.log(clients[i]);
+			if (clients[i] !== null) {
+				clientsCollection.push(clients[i].CreationTime);
+			} else clientsCollection.push('-');
+		}
+		console.log('Info collected');
+		await this.writeColumn(column, clientsCollection, partNum, partNum + partSize);
+		console.log('Recorded...');
+	};
+	setAllClientInfo = async (clients, partNum, partSize) => {
+		let clientsInfo = {
+			fullname: [],
+			phone: [],
+			city: [],
+			email: [],
+		};
+		for (let i = 0; i < clients.length; i++) {
+			if (clients[i] === null) {
+				clientsInfo.fullname.push('-');
+				clientsInfo.phone.push('-');
+				clientsInfo.city.push('-');
+				clientsInfo.email.push('-');
+			} else {
+				clientsInfo.fullname.push(clients[i].LastName + ' ' + clients[i].FirstName + ' ' + clients[i].MiddleName);
+				clientsInfo.phone.push(clients[i].MobileNumber);
+				clientsInfo.email.push(clients[i].Email);
+				clientsInfo.city.push(clients[i].CityName);
+			}
+		}
+		console.log('Info collected');
+		await this.writeColumn('C', clientsInfo.fullname, partNum, partNum + partSize);
+		await this.writeColumn('D', clientsInfo.phone, partNum, partNum + partSize);
+		await this.writeColumn('E', clientsInfo.city, partNum, partNum + partSize);
+		await this.writeColumn('F', clientsInfo.email, partNum, partNum + partSize);
+		console.log('Recorded...');
 	};
 	setAllInfo = async (clients, partNum, partSize) => {
 		let depositAmount = [];
@@ -68,7 +130,7 @@ class SheetDAO {
 			}
 		}
 		console.log('Info collected');
-		await this.writeColumn(columns.totalDeposits, depositAmount, partNum, partNum + partSize);
+		await this.writeColumn('J', depositAmount, partNum, partNum + partSize);
 		console.log('Recorded...');
 	};
 	getColumn = async (column) => {

@@ -77,17 +77,18 @@ const getDepositData = async (id, from_date, to_date, accessToken) => {
 	let data;
 	try {
 		do {
-			let response = await fetch(process.env.url, await genParams(reqObj, accessToken)).catch((err) => {
+			let response = await fetch(process.env.url_dep, await genParams(reqObj, accessToken)).catch((err) => {
 				console.log(`ERR:${err}`);
 			});
 			data = JSON.parse(JSON.stringify(await response.json()));
 			if (data.ResponseCode === 29 || data.ResponseCode === 68) {
-				console.log('ResponseCode: ' + data.ResponseCode);
+				//console.log('ResponseCode: ' + data.ResponseCode);
 				accessToken = await token.getToken();
 			} else if (data.ResponseCode === 22) {
-				console.log('ResponseCode: ' + data.ResponseCode);
+				console.log('Client Not Found: ' + data.ResponseCode);
 				return null;
 			}
+			console.log(data);
 		} while (data.ResponseCode !== 0);
 	} catch (ex) {
 		console.log(ex);

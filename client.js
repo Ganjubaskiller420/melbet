@@ -1,5 +1,5 @@
-const token = require('./getToken.js');
-let accessToken;
+import { fetch } from 'cross-fetch';
+import token from './getToken.js';
 const generateParams = (token, clientId) => {
 	return {
 		headers: {
@@ -11,18 +11,17 @@ const generateParams = (token, clientId) => {
 	};
 };
 
-export const getClient = async (id, accessToken) => {
+export const getClient = async (id) => {
 	let data;
 	try {
 		do {
-			let response = await fetch(url, generateParams(accessToken, id)).catch((err) => {
+			let response = await fetch(process.env.url_id, generateParams(await token.getToken(), id)).catch((err) => {
 				console.log(err);
 			});
 
 			data = JSON.parse(JSON.stringify(await response.json()));
 			if (data.ResponseCode === 29 || data.ResponseCode === 68) {
 				console.log('ResponseCode: ' + data.ResponseCode);
-				accessToken = await token.getToken();
 			} else if (data.ResponseCode === 22) {
 				console.log('ResponseCode: ' + data.ResponseCode);
 				return null;
@@ -34,3 +33,4 @@ export const getClient = async (id, accessToken) => {
 	}
 	return data.ResponseObject;
 };
+export default { generateParams, getClient };
