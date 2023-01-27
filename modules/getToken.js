@@ -3,9 +3,10 @@ const link = 'https://admin.dgbuilder.ru/#/platform/welcome';
 import * as dotenv from 'dotenv';
 import readline from 'readline-sync';
 import { Builder, By, error, Key, logging, until } from 'selenium-webdriver';
-import firefox from 'selenium-webdriver/firefox.js';
-dotenv.config();
+import chrome from 'selenium-webdriver/chrome.js';
+// import firefox from 'selenium-webdriver/firefox.js';
 import log from './logger.js';
+dotenv.config();
 console.log = log;
 
 let driver;
@@ -26,9 +27,9 @@ const login = async (google2fa = undefined) => {
 const getDriver = () => driver;
 
 const main = async () => {
-	let options = new firefox.Options();
-	//options.setBinary(process.env.CHROME_BINARY_PATH);
-	//let serviceBuilder = new firefox.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
+	let options = new chrome.Options();
+	options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
+	let serviceBuilder = new firefox.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
 
 	//Don't forget to add these for heroku
 	options.addArguments('--headless');
@@ -36,14 +37,12 @@ const main = async () => {
 	options.addArguments('--no-sandbox');
 	options.windowSize({ width: 1600, height: 900 });
 
-	driver = await new Builder().forBrowser('firefox').setFirefoxOptions(options).build();
+	driver = await new Builder().forBrowser('chrome').setChromeService(serviceBuilder).setChromeOptions(options).build();
 
 	// driver = await new Builder()
 	// 	.forBrowser('firefox')
 	// 	.setFirefoxOptions(new firefox.Options().headless().windowSize({ width: 1600, height: 900 }))
 	// 	.build();
-	//await driver.get(`https://www.google.com/search?&q=google`);
-	//await driver.findElement(By.xpath('/html/body/div[3]/div[3]/span/div/div/div/div[3]/div[1]/button[1]/div')).click();
 };
 
 export const getToken = async () => {
