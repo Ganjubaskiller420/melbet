@@ -1,9 +1,10 @@
 import { fetch } from 'cross-fetch';
 import { parse } from 'csv-parse';
 import * as dotenv from 'dotenv';
+import * as child_process from 'node:child_process';
 import sheetDao from '../modules/dao.js';
 import { getClientDepositData } from '../modules/deposit.js';
-import { getToken, initialize } from '../modules/getToken.js';
+import { close, getToken, initialize } from '../modules/getToken.js';
 // import { deposit } from '../scripts.js';
 
 dotenv.config({ path: '../.env' });
@@ -18,18 +19,21 @@ export const getDeposits = async (req, res, next) => {
 	body.depSum = body.depSum.toUpperCase();
 	body.start = parseInt(body.start);
 	body.part = parseInt(body.part);
+	body.amount = parseInt(body.amount);
 	body.from += 'T00:00:00.000Z';
 	body.to += 'T00:00:00.000Z';
 	sheetDao.spreadsheetId = body.link;
 	sheetDao.sheetName = body.table;
 	await initialize(body.google2fa);
-	deposit(body.id_column, body.depSum, body);
+	deposit(body.id_column, body);
 	next();
 };
-const deposit = async (idsColumn, depositColumn, body) => {
+const deposit = async (idsColumn, body) => {
 	const ids = await sheetDao.getColumn(idsColumn);
-	for (let i = body.start; i < ids.length; i += body.part) {
-		console.log(' ' + i + ' - ' + (i + body.part) + ' | ' + ids.length);
+	let end = body?.amount + body.start;
+	let length = ids.length < end ? ids.length : end;
+	for (let i = body.start; i < length; i += body.part) {
+		console.log(`--- ${i} - ${i + body.part} | [${length}] ---`);
 		let clients = [];
 		for (let j = 0; j < body.part; j++) {
 			let index = i + j;
@@ -44,6 +48,18 @@ const deposit = async (idsColumn, depositColumn, body) => {
 				clients.push(null);
 			}
 		}
-		await sheetDao.setDepositAmount(clients, i + 1, body.part, depositColumn);
+		const columns = {
+			depositExistance: body.depSum,
+			depositAmount: body.hasDep,
+		};
+		sheetDao.setDepositAmount(clients, i + 1, body.part, columns);
+		if (process.env.stop_script === 'true') {
+			console.log('STOP');
+			process.env.stop_script = 'false';
+			close();
+			return;
+		}
 	}
+	console.log('Succesfully complete');
+	close();
 };

@@ -2,7 +2,7 @@ const link = 'https://admin.dgbuilder.ru/#/platform/welcome';
 
 import * as dotenv from 'dotenv';
 import readline from 'readline-sync';
-import { Builder, By, error, Key, logging, until } from 'selenium-webdriver';
+import { Builder, By, error, Key, logging, until, WebDriver } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome.js';
 // import firefox from 'selenium-webdriver/firefox.js';
 import log from './logger.js';
@@ -28,21 +28,18 @@ const getDriver = () => driver;
 
 const main = async () => {
 	let options = new chrome.Options();
-	options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
-	let serviceBuilder = new chrome.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
+	let serviceBuilder = new chrome.ServiceBuilder();
+	if (process.env.CHROME_BINARY_PATH && process.env.CHROME_DRIVER_PATH) {
+		options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
+		serviceBuilder = new chrome.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
+	}
 
-	//Don't forget to add these for heroku
 	options.addArguments('--headless');
 	options.addArguments('--disable-gpu');
 	options.addArguments('--no-sandbox');
 	options.windowSize({ width: 1600, height: 900 });
 
 	driver = await new Builder().forBrowser('chrome').setChromeService(serviceBuilder).setChromeOptions(options).build();
-
-	// driver = await new Builder()
-	// 	.forBrowser('firefox')
-	// 	.setFirefoxOptions(new firefox.Options().headless().windowSize({ width: 1600, height: 900 }))
-	// 	.build();
 };
 
 export const getToken = async () => {
@@ -60,6 +57,8 @@ const askGoogleCode = (question) => {
 };
 
 export const initialize = async (google2fa = undefined) => {
-	await main().then((data) => login(google2fa));
+	await main().then(() => login(google2fa));
 };
-export default { getToken, initialize, getDriver };
+export const close = async () => await driver.close();
+
+export default { getToken, initialize, getDriver, close };

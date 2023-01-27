@@ -1,10 +1,14 @@
 import { ok } from 'assert';
+import * as dotenv from 'dotenv';
 import { Router } from 'express';
 import fs from 'fs';
+import { remotebuildexecution } from 'googleapis/build/src/apis/remotebuildexecution/index.js';
 import verifyToken from '../middleware/auth.js';
 import { getClientInfo } from '../middleware/clientinfo.js';
 import { getDeposits } from '../middleware/deposits.js';
 import { getIdBy } from '../middleware/getidby.js';
+dotenv.config({ path: '../.env' });
+
 const router = Router();
 
 router
@@ -49,16 +53,16 @@ router
 		});
 	});
 
-router.route('/log').get(verifyToken, (req, res) =>
-	fs.readFile('log.bin', 'utf8', function (err, data) {
-		res.send(JSON.stringify(data));
-	})
-);
-router.route('/deletelog').get(verifyToken, (req, res) =>
-	fs.unlink('log.bin', function (err) {
-		if (err) res.sendStatus(400);
-		else res.sendStatus(200);
-	})
-);
+router.route('/stop').get(verifyToken, (req, res) => {
+	process.env.stop_script = 'true';
+	res.sendStatus(200);
+});
+
+// router.route('/success_test').get(verifyToken, (req, res) => {
+// 	res.render('success', {
+// 		data: `https://docs.google.com/spreadsheets/d/1bZdMJgoVhboWwQ-CzN4TUTPlgXa-QNOmidPuOsyaK3s`,
+// 		login: req.session.login,
+// 	});
+// });
 
 export default router;

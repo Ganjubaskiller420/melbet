@@ -3,7 +3,7 @@ import { parse } from 'csv-parse';
 import * as dotenv from 'dotenv';
 import { getClient } from '../modules/client.js';
 import sheetDao from '../modules/dao.js';
-import { getToken, initialize } from '../modules/getToken.js';
+import { close, initialize } from '../modules/getToken.js';
 
 dotenv.config({ path: '../.env' });
 
@@ -16,6 +16,7 @@ export const getClientInfo = async (req, res, next) => {
 
 	body.start = parseInt(body.start);
 	body.part = parseInt(body.part);
+	body.amount = parseInt(body.amount);
 
 	sheetDao.spreadsheetId = body.link;
 	sheetDao.sheetName = body.table;
@@ -33,8 +34,10 @@ export const getClientInfo = async (req, res, next) => {
 
 const clientinfo = async (idsColumn, columns, body) => {
 	const ids = await sheetDao.getColumn(idsColumn);
-	for (let i = body.start; i < ids.length; i += body.part) {
-		console.log(' ' + i + ' - ' + (i + body.part) + ' | ' + ids.length);
+	let end = body?.amount + body.start;
+	let length = ids.length < end ? ids.length : end;
+	for (let i = body.start; i < length; i += body.part) {
+		console.log(`--- ${i} - ${i + body.part} | [${length}] ---`);
 		let clients = [];
 		for (let j = 0; j < body.part; j++) {
 			let index = i + j;
@@ -50,5 +53,13 @@ const clientinfo = async (idsColumn, columns, body) => {
 			}
 		}
 		await sheetDao.setAllClientInfo(clients, i + 1, body.part, columns);
+		if (process.env.stop_script === 'true') {
+			console.log('STOP');
+			process.env.stop_script = 'false';
+			close();
+			return;
+		}
 	}
+	console.log('Succesfully complete');
+	close();
 };

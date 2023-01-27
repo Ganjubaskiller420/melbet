@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { google } from 'googleapis';
-dotenv.config();
 import log from './logger.js';
+dotenv.config();
 console.log = log;
 
 const auth = new google.auth.GoogleAuth({
@@ -28,7 +28,6 @@ class SheetDAO {
 	setId = async (clients, partNum, partSize, column) => {
 		let clientsCollection = [];
 		for (let i = 0; i < clients.length; i++) {
-			console.log(clients[i]);
 			if (clients[i]?.Count > 0 && clients[i]?.Entities[0] !== null) {
 				clientsCollection.push(clients[i].Entities[0].Id);
 			} else clientsCollection.push('-');
@@ -76,31 +75,36 @@ class SheetDAO {
 		await this.writeColumn(columns.email, clientsInfo.email, partNum, partNum + partSize);
 		console.log('Recorded...');
 	};
-	setDepositAmount = async (clients, partNum, partSize, column) => {
+	setDepositAmount = async (clients, partNum, partSize, columns) => {
 		let depositAmount = [];
+		let depositExistance = [];
 		for (let i = 0; i < clients.length; i++) {
 			if (clients[i] === null) {
 				depositAmount.push('');
+				depositExistance.push('Нет');
 			} else {
 				let totalDeposit = 0;
 				let entities = clients[i].PaymentRequests.Entities;
-				//console.log(clients[i].PaymentRequests);
 				if (entities.length > 0) {
 					for (let j = 0; j < entities.length; j++) {
-						//console.log(entities[j].Amount);
 						if (entities[j].Status === 8) {
 							totalDeposit += entities[j].Amount;
 						}
 					}
 					console.log(`${entities[0].ClientId} has deposit ${totalDeposit}`);
 					depositAmount.push(totalDeposit);
+					depositExistance.push('Да');
 				} else {
 					depositAmount.push('');
+					depositExistance.push('Нет');
 				}
 			}
 		}
 		console.log('Info collected');
-		await this.writeColumn(column, depositAmount, partNum, partNum + partSize);
+		await this.writeColumn(columns.depositAmount, depositAmount, partNum, partNum + partSize);
+		if (columns.depositExistance) {
+			await this.writeColumn(columns.depositExistance, depositExistance, partNum, partNum + partSize);
+		}
 		console.log('Recorded...');
 	};
 	/// basic

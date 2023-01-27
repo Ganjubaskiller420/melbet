@@ -1,5 +1,11 @@
 <%- layout('layouts/layout.ejs')%>
     <script>
+        function stop() {
+            fetch('/stop').then((response) =>
+                console.log(response)
+            )
+            clearInterval(timer)
+        }
         function deleteLog() {
             fetch('/deletelog').then((response) =>
                 console.log(response)
@@ -17,25 +23,29 @@
             })
                 .then(data => data.json())
                 .then((data) => log.textContent = data)
+                .then(() => document.getElementById('footer').scrollIntoView())
         }
-        setInterval(getLog, 5000)
+        let timer = setInterval(getLog, 5000)
     </script>
-    <div class="container">
+    <div class="container my-4">
         <h4 class="text-center">Success</h4>
         <%if(data){%>
-            <div class="row mb-3">
-                <button type="button" class="btn btn-success col"><a target="_blank" style="text-decoration: none;"
-                        class="card-body text-center text-dark font-weight-bold" href="<%=data%>">
-                        Open Sheets
-                    </a></button>
-                <button onclick="deleteLog()" type="button" class="btn col btn-danger">Delete Log
+            <div class="my-3 row px-3">
+                <a type="button" target="_blank" style="text-decoration: none;"
+                    class="text-center font-weight-bold btn btn-success col mx-2" href="<%=data%>">
+                    Open
+                </a>
+                <button onclick="deleteLog()" type="button" class="btn btn-primary col">Delete Log
                 </button>
+                <button onclick="stop()" type="button" class="btn btn-danger col mx-2">Stop
+                </button>
+
             </div>
             <%}%>
-                <div class="row mb-3">
-                    <div style="white-space: pre-line; min-height: 10em;" class="my-3 mx-2 col card">
+                <div class="mb-6 mx-1">
+                    <div style="white-space: pre-line; min-height: 10em;" class="my-3 col card mx-2 p-3">
                         <code id="log">
-                    </code>
+                </code>
                     </div>
                 </div>
     </div>
