@@ -29,7 +29,7 @@ const getDriver = () => driver;
 const main = async () => {
 	let options = new chrome.Options();
 	options.setChromeBinaryPath(process.env.CHROME_BINARY_PATH);
-	let serviceBuilder = new firefox.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
+	let serviceBuilder = new chrome.ServiceBuilder(process.env.CHROME_DRIVER_PATH);
 
 	//Don't forget to add these for heroku
 	options.addArguments('--headless');
