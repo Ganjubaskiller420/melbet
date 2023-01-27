@@ -9,6 +9,7 @@ router.use(authRoutes);
 const modules = [
 	{ name: 'Deposits', route: 'deposits' },
 	{ name: 'Clients Info', route: 'clientinfo' },
+	{ name: 'Get Id By', route: 'getidby' },
 ];
 
 router.get('/', (req, res) => {

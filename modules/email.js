@@ -1,5 +1,7 @@
 import { fetch } from 'cross-fetch';
 import { getToken } from './getToken.js';
+import log from './logger.js';
+console.log = log;
 const genRequestObject = async (email, partnerId) => {
 	return {
 		SkipCount: 0,

@@ -1,8 +1,8 @@
 import { fetch } from 'cross-fetch';
 import { parse } from 'csv-parse';
 import * as dotenv from 'dotenv';
+import { getClient } from '../modules/client.js';
 import sheetDao from '../modules/dao.js';
-import { getClientDepositData } from '../modules/deposit.js';
 import { getToken, initialize } from '../modules/getToken.js';
 
 dotenv.config({ path: '../.env' });

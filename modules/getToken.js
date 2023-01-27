@@ -5,6 +5,8 @@ import readline from 'readline-sync';
 import { Builder, By, error, Key, logging, until } from 'selenium-webdriver';
 import firefox from 'selenium-webdriver/firefox.js';
 dotenv.config();
+import log from './logger.js';
+console.log = log;
 
 let driver;
 let accessToken;

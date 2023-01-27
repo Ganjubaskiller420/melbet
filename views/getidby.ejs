@@ -1,0 +1,60 @@
+<%- layout('layouts/layout.ejs')%>
+    <div class="w-75 mx-auto mt-3" style="min-height: 100%">
+        <div class="row hidden-md-up my-3">
+            <form action="/getidby" method="post" class="w-100 mx-auto mb-5 mt-3">
+                <h4 class="text-center">Get Id</h4>
+                <div class="row">
+                    <div class="col my-3">
+                        <label for="link" class="form-label">Spread-Sheet Id</label>
+                        <input type="text" class="form-control" id="link" name="link" required />
+                    </div>
+                    <div class="col my-3">
+                        <label for="table" class="form-label">Table name</label>
+                        <input type="text" class="form-control" id="table" name="table" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="value_column" class="form-label">Value Column</label>
+                        <input type="text" class="form-control" id="value_column" name="value_column" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <h4 class="text-center my-3">Columns A-Z</h4>
+                    <div class="col mb-3">
+                        <label for="id" class="form-label">Id</label>
+                        <input type="text" class="form-control" id="id" name="id" />
+                    </div>
+                </div>
+                <div class="row">
+                    <h4 class="text-center my-3">By</h4>
+                    <div class="col mb-3">
+                        <select class="form-select" required name="by">
+                            <option selected value="phone">phone</option>
+                            <option value="email">email</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <h4 class="text-center my-3">Preferences</h4>
+                    <div class="col mb-3">
+                        <label for="start" class="form-label">Start from</label>
+                        <input type="number" value="1" class="form-control" id="start" name="start" />
+                    </div>
+                    <div class="col mb-3">
+                        <label for="part" class="form-label">Part</label>
+                        <input type="number" value="10" class="form-control" id="part" name="part" />
+                    </div>
+                </div>
+                <div class="row">
+                    <h4 class="text-center my-3">Preferences</h4>
+                    <div class="col mb-3">
+                        <label for="google2fa" class="form-label">2FA Code</label>
+                        <input type="number" class="form-control" id="google2fa" name="google2fa" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-dark w-100">Sumbit</button>
+            </form>
+
+        </div>
+    </div>

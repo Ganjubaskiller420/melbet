@@ -1,7 +1,8 @@
 import * as dotenv from 'dotenv';
 import fetch from 'node-fetch';
 import { getToken } from './getToken.js';
-
+import log from './logger.js';
+console.log = log;
 const genRequestObject = async (clientId, partnerId, fromDate, toDate) => {
 	return {
 		SkipCount: 0,

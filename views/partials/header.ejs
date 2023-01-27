@@ -1,12 +1,12 @@
 <header>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<a class="navbar-brand mx-4" href="/"
-			style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">bookmaker</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-			aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+			style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">script-master</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<div class="navbar-collapse collapse justify-content-end">
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav ms-auto mb-2 mx-2 mb-lg-0">
 				<% if (login) { %>
 					<li class="nav-item">
@@ -18,7 +18,7 @@
 						<a class="nav-link" href="/logout">Log Out</a>
 					</li>
 					<% } else { %>
-						<li class="nav-item">
+						<li class="nav-item mx-4">
 							<a class="nav-link" href="/login">Login</a>
 						</li>
 						<% } %>

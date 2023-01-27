@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv';
 import { google } from 'googleapis';
 dotenv.config();
+import log from './logger.js';
+console.log = log;
 
 const auth = new google.auth.GoogleAuth({
 	keyFile: 'keys.json',

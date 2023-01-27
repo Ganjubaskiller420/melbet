@@ -7,8 +7,10 @@ import sheetDao from './modules/dao.js';
 import { getClientDepositData } from './modules/deposit.js';
 import { getClientByEmail } from './modules/email.js';
 import { getToken, initialize } from './modules/getToken.js';
+import log from './modules/logger.js';
 import { getClientByPhone } from './modules/phone.js';
 dotenv.config();
+console.log = log;
 //import { clientinfo, deposit, idByEmail, idByPhone } from './modules/executes.js';
 
 function isNumeric(value) {

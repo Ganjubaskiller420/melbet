@@ -1,9 +1,40 @@
 <%- layout('layouts/layout.ejs')%>
+    <script>
+        function deleteLog() {
+            fetch('/deletelog').then((response) =>
+                console.log(response)
+            )
+        }
+        function getLog() {
+            const log = document.getElementById('log')
+            fetch('/log', {
+                method: 'GET',
+                credentials: "same-origin",
+                headers: {
+                    'Content-Type': 'application-json'
+                }
+            })
+                .then(data => data.json())
+                .then((data) => log.textContent = data)
+        }
+        setInterval(getLog, 5000)
+    </script>
     <div class="container">
-        <h1>Success!!</h1>
+        <h4 class="text-center">Success</h4>
         <%if(data){%>
-            <a>
-                <%=data%>
-            </a>
+            <div class="row mb-3">
+                <button type="button" class="btn btn-success col"><a target="_blank" style="text-decoration: none;"
+                        class="card-body text-center text-dark font-weight-bold" href="<%=data%>">
+                        Open Sheets
+                    </a></button>
+                <button onclick="deleteLog()" type="button" class="btn col btn-danger">Delete Log
+                </button>
+            </div>
             <%}%>
+                <div class="row mb-3">
+                    <div style="white-space: pre-line; min-height: 10em;" class="my-3 mx-2 col card">
+                        <code id="log">
+                    </code>
+                    </div>
+                </div>
     </div>
