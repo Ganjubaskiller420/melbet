@@ -72,6 +72,11 @@ const mainLoop = async () => {
 				clientinfo(args[1], columns);
 			} else console.log('Bad arguments!');
 			break;
+		case 'checkphoneemail':
+			if (checkArgs(3)) {
+				checkphoneemail(args[1], args[2], args[3]);
+			} else console.log('Bad arguments!');
+			break;
 	}
 };
 
@@ -162,4 +167,19 @@ export const idByPhone = async (phoneColumn, idColumn) => {
 		await sheetDao.setId(clients, i + 1, part, idColumn);
 	}
 };
+export const checkphoneemail = async (phoneColumn, emailColumn, resultColumn) => {
+	const phones = await sheetDao.getColumn(phoneColumn);
+	const emails = await sheetDao.getColumn(emailColumn);
+	for (let i = start; i < phones.length; i += part) {
+		let phones_part = [];
+		let mails_part = [];
+		for (let j = 0; j < part; j++) {
+			let index = i + j;
+			phones_part.push(phones[index]);
+			mails_part.push(emails[index]);
+		}
+		await sheetDao.phoneAndMailExist(phones_part, mails_part, i + 1, part, resultColumn);
+	}
+};
+
 if (args.length) mainLoop();

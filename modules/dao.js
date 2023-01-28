@@ -107,6 +107,21 @@ class SheetDAO {
 		}
 		console.log('Recorded...');
 	};
+	phoneAndMailExist = async (phones, mails, partNum, partSize, column) => {
+		let ifExists = [];
+		for (let i = 0; i < phones.length; i++) {
+			if (phones[i] && mails[i] && mails[i] !== 'null' && phones[i] !== 'null') {
+				ifExists.push('+');
+			} else if (phones[i] && phones[i] !== 'null') {
+				ifExists.push('phone');
+			} else if (mails[i] && mails[i] !== 'null') {
+				ifExists.push('mail');
+			} else ifExists.push('-');
+		}
+		console.log('Info collected');
+		await this.writeColumn(column, ifExists, partNum, partNum + partSize);
+		console.log('Recorded...');
+	};
 	/// basic
 	getColumn = async (column) => {
 		console.log('get column');

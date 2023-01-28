@@ -4,10 +4,13 @@ import cookieParser from 'cookie-parser';
 import ejsMate from 'ejs-mate';
 import express from 'express';
 import session from 'express-session';
+import fs from 'fs';
+import { MongoClient } from 'mongodb';
 import mongoose from 'mongoose';
 import path from 'path';
 import config from './config/conf.js';
 import router from './routes/routes.js';
+
 const MongoDBStore = connectMongoDBSession(session);
 
 const app = express();
@@ -49,3 +52,16 @@ mongoose
 	.connect(config.CONNECTION_STRING)
 	.then(() => run())
 	.catch((err) => console.log(`Failed to connect. Error: ${err}`));
+
+MongoClient.connect(config.CONNECTION_STRING, function (err, db) {
+	if (err) throw err;
+	let keysDB = db.db('keys');
+	//keysDB.collection('google_keys').insertOne(keys);
+	keysDB
+		.collection('google_keys')
+		.findOne({}, {})
+		.then((obj) => {
+			delete obj._id;
+			fs.writeFileSync('keys.json', JSON.stringify(obj));
+		});
+});
