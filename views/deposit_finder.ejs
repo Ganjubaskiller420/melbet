@@ -1,0 +1,55 @@
+<%- layout('layouts/layout.ejs')%>
+    <div class="w-75 mx-auto mt-3" style="min-height: 100%">
+        <div class="row hidden-md-up my-3">
+            <form action="/deposit_finder" method="post" class="w-100 mx-auto mb-5 mt-3">
+                <h4 class="text-center my-3">Deposit finder</h4>
+                <div class="row">
+                    <h5 class="text-center my-3">From-table</h5>
+                    <div class="col my-3">
+                        <label for="link_1" class="form-label">Spread-Sheet Id</label>
+                        <input type="text" class="form-control" id="link_1" name="link_1" required />
+                    </div>
+                    <div class="col my-3">
+                        <label for="table_1" class="form-label">Table name</label>
+                        <input type="text" class="form-control" id="table_1" name="table_1" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="id_column_1" class="form-label">Id Column</label>
+                        <input type="text" class="form-control" id="id_column_1" name="id_column_1" required />
+                    </div>
+                    <div class="col mb-3">
+                        <label for="deposit_column_1" class="form-label">Deposit column</label>
+                        <input type="text" class="form-control" id="deposit_column_1" name="deposit_column_1"
+                            required />
+                    </div>
+                </div>
+                <div class="row">
+                    <h5 class="text-center my-3">To-table</h5>
+                    <div class="col my-3">
+                        <label for="link_2" class="form-label">Spread-Sheet Id</label>
+                        <input type="text" class="form-control" id="link_2" name="link_2" required />
+                    </div>
+                    <div class="col my-3">
+                        <label for="table_2" class="form-label">Table name</label>
+                        <input type="text" class="form-control" id="table_2" name="table_2" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="id_column_2" class="form-label">Id Column</label>
+                        <input type="text" class="form-control" id="id_column_2" name="id_column_2" required />
+                    </div>
+                    <div class="col mb-3">
+                        <label for="deposit_column_2" class="form-label">Deposit column</label>
+                        <input type="text" class="form-control" id="deposit_column_2" name="deposit_column_2"
+                            required />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-dark w-100 mt-3">Sumbit</button>
+        </div>
+        </form>
+
+    </div>
+    </div>

@@ -12,6 +12,7 @@ const modules = [
 	{ name: 'Deposits', route: 'deposits' },
 	{ name: 'Clients Info', route: 'clientinfo' },
 	{ name: 'Get Id By', route: 'getidby' },
+	{ name: 'Deposits finder', route: 'deposit_finder' },
 ];
 
 router.get('/', (req, res) => {

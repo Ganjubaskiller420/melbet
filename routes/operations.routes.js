@@ -5,8 +5,10 @@ import fs from 'fs';
 import { remotebuildexecution } from 'googleapis/build/src/apis/remotebuildexecution/index.js';
 import verifyToken from '../middleware/auth.js';
 import { getClientInfo } from '../middleware/clientinfo.js';
+import { depositFinder } from '../middleware/depositFinder.js';
 import { getDeposits } from '../middleware/deposits.js';
 import { getIdBy } from '../middleware/getidby.js';
+
 dotenv.config({ path: '../.env' });
 
 const router = Router();
@@ -47,6 +49,20 @@ router
 		})
 	)
 	.post(verifyToken, getIdBy, (req, res) => {
+		res.render('success', {
+			data: `https://docs.google.com/spreadsheets/d/${req.body.link}`,
+			login: req.session.login,
+		});
+	});
+
+router
+	.route('/deposit_finder')
+	.get(verifyToken, (req, res) =>
+		res.render('deposit_finder', {
+			login: req.session.login,
+		})
+	)
+	.post(verifyToken, depositFinder, (req, res) => {
 		res.render('success', {
 			data: `https://docs.google.com/spreadsheets/d/${req.body.link}`,
 			login: req.session.login,

@@ -1,7 +1,6 @@
 import { fetch } from 'cross-fetch';
 import { parse } from 'csv-parse';
 import * as dotenv from 'dotenv';
-import * as child_process from 'node:child_process';
 import sheetDao from '../modules/dao.js';
 import { getClientDepositData } from '../modules/deposit.js';
 import { close, getToken, initialize } from '../modules/getToken.js';
